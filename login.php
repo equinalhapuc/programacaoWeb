@@ -4,12 +4,14 @@
         <title>Login - Coisas Emprestadas</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
-         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <div class="container">
-            <h2>Login - Coisas Emprestadas</h2>
+            <div class="mt-4 p-5 bg-secondary text-white rounded">
+                <h1>Login </h1> <p>Coisas Emprestadas</p>
+            </div>
             <form action="login.php" method="post">
                 <div class="mb-3 mt-3">
                     <label for="email">E-mail:</label>
