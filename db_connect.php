@@ -1,6 +1,6 @@
 <?php
 //phpinfo();
-$servername = "172.17.0.3";
+$servername = "db";
 $username = "coisas";
 $password = "coisas";
 

@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: coisas
+      MYSQL_DATABASE: coisas
+      MYSQL_USER: coisas
+      MYSQL_PASSWORD: coisas
+    ports:
+      - "3306:3306"
+  web:
+    image: coisas-php:latest
+    container_name: php_web
+    depends_on:
+      - db
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "8080:80"
