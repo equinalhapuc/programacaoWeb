@@ -13,9 +13,10 @@
         $sobrenome = strip_tags($_POST['sobrenome']);
         $email = strip_tags($_POST['email']);
         $senha = password_hash(strip_tags($_POST['senha']), PASSWORD_DEFAULT);
+        $isAdmin = !isset($_POST['admin']) || empty($_POST['admin']) ? 0 : true;
 
-        $sql = "INSERT INTO usuario (nome, sobrenome, email, senha)
-        VALUES ('$nome', '$sobrenome', '$email', '$senha')";
+        $sql = "INSERT INTO usuario (nome, sobrenome, email, senha, admin)
+        VALUES ('$nome', '$sobrenome', '$email', '$senha', '$isAdmin')";
 
         if ($conn->query($sql) === TRUE) {
             $msg = urlencode("Usuário Cadastrado com Sucesso!");
@@ -120,6 +121,10 @@
                 <div class="mb-3">
                     <label for="confirma">Repita a Senha:</label>
                     <input type="password" name="confirma" class="form-control" placeholder="*********" required />
+                </div>
+                <div class="mb-3">
+                    <label for="admin" class="form-check-label">É administrador:</label>
+                    <input type="checkbox" name="admin" class="form-check-input" value=1/>
                 </div>
                 <div style="margin-bottom: 150px;">
                     <input value="Enviar" type="submit" class="btn btn-success">

@@ -34,9 +34,13 @@ if (!isset($_SESSION['valid'])) {
                 <li class="nav-item">
                     <a class="nav-link active" href="meusitens.php">Meus Itens</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cadastroUsuario.php">Cadastrar Usuários</a>
-                </li>
+                <?php
+                if ($_SESSION['admin'] == 1) {
+                    echo "<li class=\"nav-item\">
+                        <a class=\"nav-link\" href=\"cadastroUsuario.php\">Cadastrar Usuários</a>
+                    </li>";
+                }
+                ?>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>
                 </li>

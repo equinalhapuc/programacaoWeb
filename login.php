@@ -8,7 +8,7 @@ if (
 ) {
 
     $email = strip_tags($_POST['email']);
-    $sql = "SELECT id, nome, sobrenome, email, senha FROM usuario WHERE email = '$email'";
+    $sql = "SELECT id, nome, sobrenome, email, senha, admin FROM usuario WHERE email = '$email'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -17,10 +17,12 @@ if (
         $nome = $row['nome'];
         $hash = $row['senha'];
         $senha = $_POST['password'];
+        $admin = $row['admin'];
         if (password_verify($senha, $hash)) {
             $_SESSION['valid'] = true;
             $_SESSION['userId'] = $id;
             $_SESSION['nome'] = $nome;
+            $_SESSION['admin'] = $admin;
             $conn->close();
             //var_dump($row);
             //var_dump($sql);

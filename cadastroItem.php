@@ -1,31 +1,33 @@
 <?php
-    session_start();
-    include('db_connect.php');
-    
-    //var_dump($_POST);
-    if(!isset($_SESSION['valid'])) {
-        header("Location: login.php");
-    }
-    if (isset($_POST) && !empty($_POST['nome']) 
-        && !empty($_POST['desc'])) {
+session_start();
+include('db_connect.php');
 
-        $nome = strip_tags($_POST['nome']);
-        $descricao = strip_tags($_POST['desc']);
-        $proprietario = $_SESSION['userId'];
+//var_dump($_POST);
+if (!isset($_SESSION['valid'])) {
+    header("Location: login.php");
+}
+if (
+    isset($_POST) && !empty($_POST['nome'])
+    && !empty($_POST['desc'])
+) {
 
-        $sql = "INSERT INTO item (nome, descricao, proprietario, status)
+    $nome = strip_tags($_POST['nome']);
+    $descricao = strip_tags($_POST['desc']);
+    $proprietario = $_SESSION['userId'];
+
+    $sql = "INSERT INTO item (nome, descricao, proprietario, status)
         VALUES ('$nome', '$descricao', $proprietario, 0)";
 
-        if ($conn->query($sql) === TRUE) {
-            $msg = urlencode("Item Cadastrado com Sucesso!");
-            $conn->close();
-            header("Location: cadastroItem.php?sucesso=1&msg=$msg");
-        } else {
-            $msg = urlencode($conn->error);
-            $conn->close();
-            header("Location: cadastroItem.php?sucesso=0&msg=$msg");
-        }
+    if ($conn->query($sql) === TRUE) {
+        $msg = urlencode("Item Cadastrado com Sucesso!");
+        $conn->close();
+        header("Location: cadastroItem.php?sucesso=1&msg=$msg");
+    } else {
+        $msg = urlencode($conn->error);
+        $conn->close();
+        header("Location: cadastroItem.php?sucesso=0&msg=$msg");
     }
+}
 ?>
 <!doctype html>
 <html>
@@ -50,26 +52,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="home.php">Home</a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a class="nav-link active" href="meusitens.php">Meus Itens</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cadastroUsuario.php">Cadastrar Usuários</a>
-                </li>
+                <?php
+                if ($_SESSION['admin'] == 1) {
+                    echo "<li class=\"nav-item\">
+                        <a class=\"nav-link\" href=\"cadastroUsuario.php\">Cadastrar Usuários</a>
+                    </li>";
+                }
+                ?>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             </ul>
             <?php
-                $nome = $_SESSION['nome'];
-                echo "<a class=\"nav-link float-end text-secondary mr-5\" href=\"meusdados.php\"><i class=\"fas fa-user\" style=\"color:gray\"></i>&nbsp;&nbsp;&nbsp;$nome</a>"
+            $nome = $_SESSION['nome'];
+            echo "<a class=\"nav-link float-end text-secondary mr-5\" href=\"meusdados.php\"><i class=\"fas fa-user\" style=\"color:gray\"></i>&nbsp;&nbsp;&nbsp;$nome</a>"
             ?>
         </div>
     </nav>
 
     <article class="container mt-5" style="margin-bottom: 150px;">
-    <?php
+        <?php
         if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1) {
             $msg = $_GET['msg'];
             echo "<div class=\"toast show\">
@@ -81,7 +87,7 @@
               $msg
             </div>
           </div>";
-        } else if (isset($_GET['sucesso']) && $_GET['sucesso'] == 0){
+        } else if (isset($_GET['sucesso']) && $_GET['sucesso'] == 0) {
             $msg = $_GET['msg'];
             echo "<div class=\"toast show\">
             <div class=\"toast-header\">
@@ -94,7 +100,7 @@
           </div>";
         }
         $conn->close();
-    ?>
+        ?>
         <div>
             <h1>Cadastro de Item</h1>
         </div>
