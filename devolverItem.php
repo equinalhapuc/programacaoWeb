@@ -53,7 +53,7 @@ if (isset($_POST) && !empty($_POST['devolucao']) && !empty($_POST['idEmprestimo'
                 <li class="nav-item">
                     <a class="nav-link" href="home.php">Home</a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a class="nav-link" href="meusitens.php">Meus Itens</a>
                 </li>
@@ -76,9 +76,34 @@ if (isset($_POST) && !empty($_POST['devolucao']) && !empty($_POST['idEmprestimo'
 
     </nav>
     <article class="container mt-5" style="margin-bottom: 150px;">
+        <?php
+        if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1) {
+            $msg = $_GET['msg'];
+            echo "<div class=\"toast show\">
+            <div class=\"toast-header\">
+            <strong class=\"me-auto\">Mensagem</strong>
+              <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"toast\"></button>
+            </div>
+            <div class=\"toast-body\">
+              $msg
+            </div>
+          </div>";
+        } else if (isset($_GET['sucesso']) && $_GET['sucesso'] == 0) {
+            $msg = $_GET['msg'];
+            echo "<div class=\"toast show\">
+            <div class=\"toast-header\">
+            <strong class=\"me-auto text-danger\">Erro!</strong>
+              <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"toast\"></button>
+            </div>
+            <div class=\"toast-body\">
+              $msg
+            </div>
+          </div>";
+        }
+        ?>
         <div class="row">
             <div class="col">
-                <h2>Emprestar Item</h2>
+                <h2>Devolver Item</h2>
             </div>
         </div>
         <div class="row">
@@ -101,7 +126,8 @@ if (isset($_POST) && !empty($_POST['devolucao']) && !empty($_POST['idEmprestimo'
                             $sql = "select i.id, i.nome, i.descricao, max(e.id) as idEmprestimo, u.nome as dest, u.sobrenome, u.email from item i
                             join emprestimo e on i.id = e.idItem
                             join usuario u on e.idDestinatario = u.id
-                            where i.id = $itemId";
+                            where i.id = $itemId
+                            group by i.id, i.nome, i.descricao, u.nome, u.sobrenome, u.email";
 
                             $result = $conn->query($sql);
                             if ($result->num_rows > 0) {
