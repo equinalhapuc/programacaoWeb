@@ -6,27 +6,10 @@ include('db_connect.php');
 if (!isset($_SESSION['valid'])) {
     header("Location: login.php");
 }
-if (
-    isset($_POST) && !empty($_POST['nome'])
-    && !empty($_POST['desc'])
-) {
 
-    $nome = strip_tags($_POST['nome']);
-    $descricao = strip_tags($_POST['desc']);
-    $proprietario = $_SESSION['userId'];
-
-    $sql = "INSERT INTO item (nome, descricao, proprietario, status)
-        VALUES ('$nome', '$descricao', $proprietario, 0)";
-
-    if ($conn->query($sql) === TRUE) {
-        $msg = urlencode("Item Cadastrado com Sucesso!");
-        $conn->close();
-        header("Location: cadastroItem.php?sucesso=1&msg=$msg");
-    } else {
-        $msg = urlencode($conn->error);
-        $conn->close();
-        header("Location: cadastroItem.php?sucesso=0&msg=$msg");
-    }
+if (isset($_SESSION['admin']) && $_SESSION['admin'] != 1) {
+    echo "<h1>Acesso Negado!</h1>";
+    die();
 }
 ?>
 <!doctype html>
@@ -43,7 +26,7 @@ if (
 <body>
     <header class="p-5 bg-secondary text-white">
         <h1>Coisas Emprestadas</h1>
-        <p>Cadastro de Item</p>
+        <p>Usuários</p>
     </header>
 
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -52,14 +35,14 @@ if (
                 <li class="nav-item">
                     <a class="nav-link" href="home.php">Home</a>
                 </li>
-
+                
                 <li class="nav-item">
                     <a class="nav-link active" href="meusitens.php">Meus Itens</a>
                 </li>
                 <?php
                 if ($_SESSION['admin'] == 1) {
                     echo "<li class=\"nav-item\">
-                        <a class=\"nav-link\" href=\"usuarios.php\">Usuários</a>
+                        <a class=\"nav-link active\" href=\"usuarios.php\">Usuários</a>
                     </li>";
                 }
                 ?>
@@ -99,25 +82,53 @@ if (
             </div>
           </div>";
         }
-        $conn->close();
         ?>
         <div>
-            <h1>Cadastro de Item</h1>
+            <h1>Usuários</h1>
         </div>
         <div>
-            <form action="cadastroItem.php" method="post">
-                <div class="mb-3 mt-3">
-                    <label for="nome">Nome</label>
-                    <input type="text" class="form-control" name="nome" placeholder="Ex: Violão folk" required autofocus />
-                </div>
-                <div class="mb-3">
-                    <label for="desc">Descrição</label>
-                    <textarea rows="4" cols="25" class="form-control" name="desc" placeholder="Descrição ..."></textarea>
-                </div>
-                <div class="mb-3">
-                    <input value="Enviar" type="submit" class="btn btn-success">
-                </div>
-            </form>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Admin</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sql = "SELECT id, nome, sobrenome, email, admin FROM usuario";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $userId = $row['id'];
+                            $nome = $row['nome'];
+                            $sobrenome = $row['sobrenome'];
+                            $email = $row['email'];
+                            $admin = $row['admin'];
+
+                            $tableItem =  "<tr>
+                                    <td>$userId</td>
+                                    <td>$nome $sobrenome</td>
+                                    <td>$email</td>";
+                            if($admin == 1) {
+                                $tableItem = $tableItem . "<td>SIM</td>";
+                            } else {
+                                $tableItem = $tableItem . "<td>NÃO</td>";
+                            }
+                            $tableItem = $tableItem . "<td><a href=\"editarusuario.php?userId=$userId\"><button type=\"button\" class=\"btn btn-success\">Editar</button></a></td></tr>";
+                            echo $tableItem;
+                        }
+                    }
+                    $conn->close();
+                    ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="container">
+            <a href="cadastroUsuario.php"><button type="button" class="btn btn-success">Novo Usuário</button></a>
         </div>
     </article>
     <footer class="mt-5 p-4 bg-dark text-white text-center" style="position: fixed;left: 0;bottom: 0;width: 100%;">

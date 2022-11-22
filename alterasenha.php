@@ -57,7 +57,7 @@
                 <?php
                 if ($_SESSION['admin'] == 1) {
                     echo "<li class=\"nav-item\">
-                        <a class=\"nav-link\" href=\"cadastroUsuario.php\">Cadastrar Usuários</a>
+                        <a class=\"nav-link\" href=\"usuarios.php\">Usuários</a>
                     </li>";
                 }
                 ?>

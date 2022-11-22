@@ -6,6 +6,11 @@
     if(!isset($_SESSION['valid'])) {
         header("Location: login.php");
     }
+    if (isset($_SESSION['admin']) && $_SESSION['admin'] != 1) {
+        echo "<h1>Acesso Negado!</h1>";
+        die();
+    }
+
     if (isset($_POST) && !empty($_POST['nome']) 
         && !empty($_POST['sobrenome']) && !empty($_POST['email']) && !empty($_POST['senha'])) {
 
@@ -57,7 +62,7 @@
                     <a class="nav-link" href="meusitens.php">Meus Itens</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="cadastroUsuario.php">Cadastrar Usuários</a>
+                    <a class="nav-link active" href="usuarios.php">Usuários</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>
